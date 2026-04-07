@@ -6,6 +6,7 @@ const { Server } = require('socket.io');
 const Message = require('./models/Message');
 const authRoutes = require('./routes/authRoutes');
 const chatRoutes = require('./routes/chatRoutes');
+const { swaggerUi, specs } = require('./swagger');
 
 const app = express();
 const server = http.createServer(app);
@@ -15,9 +16,16 @@ const io = new Server(server, {
 
 app.use(express.json());
 
+// Swagger Documentation
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(specs, { swaggerOptions: { url: '/api-docs.json' } }));
+app.get('/api-docs.json', (req, res) => {
+    res.setHeader('Content-Type', 'application/json');
+    res.send(specs);
+});
+
 // Root Route
 app.get('/', (req, res) => {
-    res.json({ message: 'Live Chatting APIs - Server is running ✓', status: 'online' });
+    res.json({ message: 'Live Chatting APIs - Server is running ✓', status: 'online', docsUrl: '/api-docs' });
 });
 
 // Mount Routes

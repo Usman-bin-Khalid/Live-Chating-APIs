@@ -37,6 +37,17 @@ app.get('/', (req, res) => {
 });
 
 // Mount Routes
+// Health check endpoint
+app.get('/health', (req, res) => {
+    const mongoStatus = mongoose.connection.readyState === 1 ? '✓ Connected' : '✗ Disconnected';
+    res.json({
+        status: 'Server is running',
+        timestamp: new Date().toISOString(),
+        mongodb: mongoStatus,
+        environment: process.env.NODE_ENV || 'development'
+    });
+});
+
 app.use('/auth', authRoutes);
 app.use('/chat', chatRoutes);
 

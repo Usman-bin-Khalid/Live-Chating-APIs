@@ -3,6 +3,7 @@ const express = require('express');
 const mongoose = require('mongoose');
 const http = require('http');
 const { Server } = require('socket.io');
+const cors = require('cors');
 const Message = require('./models/Message');
 const authRoutes = require('./routes/authRoutes');
 const chatRoutes = require('./routes/chatRoutes');
@@ -13,6 +14,13 @@ const server = http.createServer(app);
 const io = new Server(server, {
     cors: { origin: "*" } // Adjust for production
 });
+
+// CORS Middleware
+app.use(cors({
+    origin: "*",
+    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+    credentials: false
+}));
 
 app.use(express.json());
 

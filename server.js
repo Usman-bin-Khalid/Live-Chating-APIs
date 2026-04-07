@@ -86,15 +86,19 @@ io.on('connection', (socket) => {
 
 const PORT = parseInt(process.env.PORT, 10) || 5001;
 
-// Connect to MongoDB
+// Start server first (don't wait for MongoDB)
+server.listen(PORT, () => {
+    console.log(`✓ Server & Socket running on port ${PORT}`);
+});
+
+// Connect to MongoDB in the background
 mongoose.connect(process.env.MONGO_URI)
     .then(() => {
         console.log('✓ MongoDB connected successfully');
-        server.listen(PORT, () => console.log(`✓ Server & Socket running on port ${PORT}`));
     })
     .catch(err => {
         console.error('✗ MongoDB connection error:', err.message);
-        process.exit(1);
+        console.warn('⚠ Server will continue without database connection - please fix MONGO_URI');
     });
 
 mongoose.connection.on('disconnected', () => {

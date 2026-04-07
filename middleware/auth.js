@@ -12,7 +12,7 @@ const auth = (req, res, next) => {
         req.user = decoded; // Contains user ID from the login payload
         next();
     } catch (err) {
-        res.status(401).json({ message: "Token is not valid" });
+        return res.status(401).json({ message: "Token is not valid" });
     }
 };
 

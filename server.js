@@ -12,15 +12,27 @@ const { swaggerUi, specs } = require('./swagger');
 const app = express();
 const server = http.createServer(app);
 const io = new Server(server, {
-    cors: { origin: "*" } // Adjust for production
+    cors: { 
+        origin: "*",
+        methods: ["GET", "POST", "PUT", "DELETE"],
+        allowedHeaders: ["Content-Type", "Authorization"]
+    }
 });
 
-// CORS Middleware
-app.use(cors({
-    origin: "*",
-    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
-    credentials: false
-}));
+// CORS Middleware - More permissive configuration
+const corsOptions = {
+    origin: function (origin, callback) {
+        // Allow all origins
+        callback(null, true);
+    },
+    credentials: false,
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization'],
+    optionsSuccessStatus: 200
+};
+
+app.use(cors(corsOptions));
+app.options('*', cors(corsOptions));
 
 app.use(express.json());
 
@@ -75,17 +87,30 @@ io.on('connection', (socket) => {
 
 const PORT = parseInt(process.env.PORT, 10) || 5001;
 
+// Connect to MongoDB
 mongoose.connect(process.env.MONGO_URI)
     .then(() => {
-        server.listen(PORT, () => console.log(`Server & Socket running on port ${PORT}`));
+        console.log('✓ MongoDB connected successfully');
+        server.listen(PORT, () => console.log(`✓ Server & Socket running on port ${PORT}`));
     })
-    .catch(err => console.log(err));
+    .catch(err => {
+        console.error('✗ MongoDB connection error:', err.message);
+        process.exit(1);
+    });
+
+mongoose.connection.on('disconnected', () => {
+    console.warn('⚠ MongoDB disconnected');
+});
+
+mongoose.connection.on('error', (err) => {
+    console.error('✗ MongoDB error:', err.message);
+});
 
 server.on('error', (err) => {
     if (err && err.code === 'EADDRINUSE') {
-        console.error(`Port ${PORT} is already in use. To free it, run:\n  lsof -i :${PORT} -t | xargs kill -9`);
+        console.error(`✗ Port ${PORT} is already in use. To free it, run:\n  lsof -i :${PORT} -t | xargs kill -9`);
         process.exit(1);
     } else {
-        console.error('Server error:', err);
+        console.error('✗ Server error:', err);
     }
 });

@@ -15,6 +15,11 @@ const io = new Server(server, {
 
 app.use(express.json());
 
+// Root Route
+app.get('/', (req, res) => {
+    res.json({ message: 'Live Chatting APIs - Server is running ✓', status: 'online' });
+});
+
 // Mount Routes
 app.use('/auth', authRoutes);
 app.use('/chat', chatRoutes);

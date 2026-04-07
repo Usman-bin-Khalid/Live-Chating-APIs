@@ -19,20 +19,8 @@ const io = new Server(server, {
     }
 });
 
-// CORS Middleware - More permissive configuration
-const corsOptions = {
-    origin: function (origin, callback) {
-        // Allow all origins
-        callback(null, true);
-    },
-    credentials: false,
-    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-    allowedHeaders: ['Content-Type', 'Authorization'],
-    optionsSuccessStatus: 200
-};
-
-app.use(cors(corsOptions));
-app.options('*', cors(corsOptions));
+// CORS Middleware - Simple configuration
+app.use(cors());
 
 app.use(express.json());
 

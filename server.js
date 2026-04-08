@@ -31,9 +31,6 @@ const corsOptions = {
 
 app.use(cors(corsOptions));
 
-// Handle preflight requests explicitly for all routes
-app.options('*', cors(corsOptions));
-
 app.use(express.json());
 
 // Swagger Documentation

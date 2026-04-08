@@ -9,8 +9,11 @@ const authRoutes = require('./routes/authRoutes');
 const chatRoutes = require('./routes/chatRoutes');
 const { swaggerUi, specs } = require('./swagger');
 
+
+
 const app = express();
 const server = http.createServer(app);
+
 const io = new Server(server, {
     cors: { 
         origin: "*",
@@ -29,6 +32,16 @@ const corsOptions = {
 };
 
 app.use(cors(corsOptions));
+
+// Handle OPTIONS requests for preflight
+app.options('/', cors(corsOptions));
+app.options('/auth', cors(corsOptions));
+app.options('/auth/signup', cors(corsOptions));
+app.options('/auth/login', cors(corsOptions));
+app.options('/auth/profile', cors(corsOptions));
+app.options('/chat', cors(corsOptions));
+app.options('/chat/inbox', cors(corsOptions));
+app.options('/chat/messages/:otherUserId', cors(corsOptions));
 
 app.use(express.json());
 

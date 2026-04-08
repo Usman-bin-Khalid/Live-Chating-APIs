@@ -23,6 +23,9 @@ const io = new Server(server, {
     }
 });
 
+app.set('io', io);
+
+
 // CORS - Must be FIRST middleware
 const corsOptions = {
     origin: '*',

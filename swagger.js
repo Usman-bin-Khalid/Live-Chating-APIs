@@ -227,7 +227,7 @@ const options = {
       '/chat/inbox': {
         get: {
           summary: 'Get user inbox',
-          description: 'Retrieve all conversations with latest message and contact details',
+          description: 'Retrieve all conversations with latest message, unread count, and contact details (like WhatsApp main screen)',
           tags: ['Chat'],
           security: [{ bearerAuth: [] }],
           responses: {
@@ -240,10 +240,18 @@ const options = {
                     items: {
                       type: 'object',
                       properties: {
-                        _id: { type: 'string' },
+                        _id: { type: 'string', description: 'Contact user ID' },
                         lastMessage: { type: 'string' },
                         timestamp: { type: 'string', format: 'date-time' },
-                        contactDetails: { type: 'object' }
+                        unreadCount: { type: 'integer' },
+                        contactDetails: {
+                          type: 'object',
+                          properties: {
+                            _id: { type: 'string' },
+                            username: { type: 'string' },
+                            email: { type: 'string' }
+                          }
+                        }
                       }
                     }
                   }
@@ -257,7 +265,7 @@ const options = {
       '/chat/messages/{otherUserId}': {
         get: {
           summary: 'Get messages between two users',
-          description: 'Retrieve all messages exchanged between the current user and another user',
+          description: 'Retrieve all messages exchanged between the current user and another user. Also marks incoming messages as read.',
           tags: ['Chat'],
           security: [{ bearerAuth: [] }],
           parameters: [
@@ -286,7 +294,45 @@ const options = {
             401: { description: 'Unauthorized - Invalid or missing token' }
           }
         }
+      },
+      '/chat/send': {
+        post: {
+          summary: 'Send a message (HTTP)',
+          description: 'Send a message to another user via REST API. Also triggers a Socket.io event to the receiver.',
+          tags: ['Chat'],
+          security: [{ bearerAuth: [] }],
+          requestBody: {
+            required: true,
+            content: {
+              'application/json': {
+                schema: {
+                  type: 'object',
+                  required: ['receiver', 'text'],
+                  properties: {
+                    receiver: { type: 'string', example: '65f1234567890abcdef12345' },
+                    text: { type: 'string', example: 'Hello from Swagger!' }
+                  }
+                }
+              }
+            }
+          },
+          responses: {
+            201: {
+              description: 'Message sent successfully',
+              content: {
+                'application/json': {
+                  schema: {
+                    $ref: '#/components/schemas/Message'
+                  }
+                }
+              }
+            },
+            400: { description: 'Missing required fields' },
+            401: { description: 'Unauthorized' }
+          }
+        }
       }
+
     }
   },
   apis: []

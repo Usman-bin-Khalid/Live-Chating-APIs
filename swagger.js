@@ -224,6 +224,44 @@ const options = {
           }
         }
       },
+      '/auth/search': {
+        get: {
+          summary: 'Search for users',
+          description: 'Search for users by username or email (case-insensitive)',
+          tags: ['Authentication'],
+          security: [{ bearerAuth: [] }],
+          parameters: [
+            {
+              in: 'query',
+              name: 'query',
+              required: true,
+              schema: { type: 'string' },
+              description: 'The search query (username or email)'
+            }
+          ],
+          responses: {
+            200: {
+              description: 'Users found successfully',
+              content: {
+                'application/json': {
+                  schema: {
+                    type: 'array',
+                    items: {
+                      type: 'object',
+                      properties: {
+                        _id: { type: 'string' },
+                        username: { type: 'string' },
+                        email: { type: 'string' }
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            401: { description: 'Unauthorized' }
+          }
+        }
+      },
       '/chat/inbox': {
         get: {
           summary: 'Get user inbox',

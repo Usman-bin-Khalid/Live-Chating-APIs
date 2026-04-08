@@ -28,10 +28,12 @@ exports.getInbox = async (req, res) => {
                     unreadCount: {
                         $sum: {
                             $cond: [
-                                { $and: [
-                                    { $eq: ["$receiver", userId] },
-                                    { $eq: ["$isRead", false] }
-                                ]},
+                                {
+                                    $and: [
+                                        { $eq: ["$receiver", userId] },
+                                        { $eq: ["$isRead", false] }
+                                    ]
+                                },
                                 1,
                                 0
                             ]
@@ -93,6 +95,7 @@ exports.getMessages = async (req, res) => {
         res.status(500).json({ error: err.message });
     }
 };
+
 
 // @desc    Send a message via HTTP
 // @route   POST /chat/send

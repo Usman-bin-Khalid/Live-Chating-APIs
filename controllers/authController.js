@@ -71,3 +71,28 @@ exports.updateProfile = async (req, res, next) => {
         res.status(500).json({ error: err.message || 'Profile update failed' });
     }
 };
+
+exports.searchUsers = async (req, res, next) => {
+    try {
+        const { query } = req.query;
+        console.log('Search query received:', query, 'from user:', req.user.id);
+        if (!query) {
+            return res.status(400).json({ error: "Search query is required" });
+        }
+
+        // Search by username or email (case-insensitive)
+        const users = await User.find({
+            $or: [
+                { username: { $regex: query, $options: 'i' } },
+                { email: { $regex: query, $options: 'i' } }
+            ],
+            _id: { $ne: req.user.id }
+        }).select('username email _id');
+
+        console.log(`Found ${users.length} users for query: ${query}`);
+        res.json(users);
+    } catch (err) {
+        console.error('Search error:', err);
+        res.status(500).json({ error: err.message || 'Search failed' });
+    }
+};

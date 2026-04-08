@@ -20,14 +20,19 @@ const io = new Server(server, {
     }
 });
 
-// Enable CORS for all routes
-app.use(cors({
+// CORS - Must be FIRST middleware
+const corsOptions = {
     origin: '*',
     credentials: false,
     optionsSuccessStatus: 200,
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS', 'PATCH'],
-    allowedHeaders: ['*']
-}));
+    allowedHeaders: ['Content-Type', 'Authorization', '*']
+};
+
+app.use(cors(corsOptions));
+
+// Handle preflight requests explicitly for all routes
+app.options('*', cors(corsOptions));
 
 app.use(express.json());
 

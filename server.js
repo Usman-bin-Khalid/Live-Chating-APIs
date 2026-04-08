@@ -28,25 +28,19 @@ const corsOptions = {
     origin: '*',
     credentials: false,
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
-    allowedHeaders: ['Content-Type', 'Authorization']
+    allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With', 'Accept', 'Origin']
 };
 
 app.use(cors(corsOptions));
+app.options('*', cors(corsOptions)); // Handle all preflight requests
 
-// Handle OPTIONS requests for preflight
-app.options('/', cors(corsOptions));
-app.options('/auth', cors(corsOptions));
-app.options('/auth/signup', cors(corsOptions));
-app.options('/auth/login', cors(corsOptions));
-app.options('/auth/profile', cors(corsOptions));
-app.options('/chat', cors(corsOptions));
-app.options('/chat/inbox', cors(corsOptions));
-app.options('/chat/messages/:otherUserId', cors(corsOptions));
+
 
 app.use(express.json());
 
 // Swagger Documentation
-app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(specs, { swaggerOptions: { url: '/api-docs.json' } }));
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(specs));
+
 app.get('/api-docs.json', (req, res) => {
     res.setHeader('Content-Type', 'application/json');
     res.send(specs);
@@ -125,6 +119,9 @@ const PORT = parseInt(process.env.PORT, 10) || 5001;
 server.listen(PORT, () => {
     console.log(`✓ Server & Socket running on port ${PORT}`);
 });
+
+
+
 
 // Connect to MongoDB in the background
 mongoose.connect(process.env.MONGO_URI)

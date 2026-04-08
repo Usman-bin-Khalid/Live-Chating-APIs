@@ -15,7 +15,7 @@ const options = {
     },
     servers: [
       {
-        url: 'https://live-chatting-apis.onrender.com',
+        url: 'https://live-chating-apis.onrender.com',
         description: 'Production Server'
       },
       {

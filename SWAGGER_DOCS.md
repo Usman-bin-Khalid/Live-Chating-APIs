@@ -6,7 +6,7 @@ This project provides a real-time chatting API with Socket.io integration, user 
 ## Live API Documentation
 
 Access the interactive Swagger UI at:
-- **Production:** `https://live-chatting-apis.onrender.com/api-docs`
+- **Production:** `https://live-chating-apis.onrender.com/api-docs`
 - **Development:** `http://localhost:8080/api-docs`
 
 ## API Endpoints Summary
@@ -253,7 +253,7 @@ You can test all endpoints directly from the Swagger UI at `/api-docs`
 
 ```javascript
 // Signup
-const response = await fetch('https://live-chatting-apis.onrender.com/auth/signup', {
+const response = await fetch('https://live-chating-apis.onrender.com/auth/signup', {
   method: 'POST',
   headers: { 'Content-Type': 'application/json' },
   body: JSON.stringify({
@@ -264,7 +264,7 @@ const response = await fetch('https://live-chatting-apis.onrender.com/auth/signu
 });
 
 // Get Inbox (with token)
-const inbox = await fetch('https://live-chatting-apis.onrender.com/chat/inbox', {
+const inbox = await fetch('https://live-chating-apis.onrender.com/chat/inbox', {
   headers: { 'Authorization': `Bearer ${token}` }
 });
 ```
@@ -274,7 +274,7 @@ const inbox = await fetch('https://live-chatting-apis.onrender.com/chat/inbox', 
 ```javascript
 import io from 'socket.io-client';
 
-const socket = io('https://live-chatting-apis.onrender.com');
+const socket = io('https://live-chating-apis.onrender.com');
 
 // Join room
 socket.emit('join_room', userId);

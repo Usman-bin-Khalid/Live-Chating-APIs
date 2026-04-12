@@ -6,7 +6,7 @@ const User = require('../models/User');
 // @access  Private
 exports.createProfile = async (req, res) => {
     try {
-        const { age, country, phoneNo, about } = req.body;
+        const { age, country, phoneNumber, about } = req.body;
         const userId = req.user.id;
 
         const user = await User.findById(userId);
@@ -25,7 +25,7 @@ exports.createProfile = async (req, res) => {
             // If profile exists, update it
             profile.age = age || profile.age;
             profile.country = country || profile.country;
-            profile.phoneNo = phoneNo || profile.phoneNo;
+            profile.phoneNumber = phoneNumber || profile.phoneNumber;
             profile.about = about || profile.about;
             if (profilePic) profile.profilePic = profilePic;
             
@@ -39,7 +39,7 @@ exports.createProfile = async (req, res) => {
             username: user.username,
             age,
             country,
-            phoneNo,
+            phoneNumber,
             about,
             profilePic
         });
@@ -71,7 +71,7 @@ exports.getProfile = async (req, res) => {
 // @access  Private
 exports.updateProfile = async (req, res) => {
     try {
-        const { age, country, phoneNo, about } = req.body;
+        const { age, country, phoneNumber, about } = req.body;
         const userId = req.user.id;
 
         let profile = await Profile.findOne({ user: userId });
@@ -81,7 +81,7 @@ exports.updateProfile = async (req, res) => {
 
         profile.age = age !== undefined ? age : profile.age;
         profile.country = country || profile.country;
-        profile.phoneNo = phoneNo || profile.phoneNo;
+        profile.phoneNumber = phoneNumber || profile.phoneNumber;
         profile.about = about || profile.about;
 
         if (req.file) {

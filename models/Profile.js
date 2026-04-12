@@ -17,7 +17,7 @@ const profileSchema = new mongoose.Schema({
     country: {
         type: String
     },
-    phoneNo: {
+    phoneNumber: {
         type: String
     },
     about: {

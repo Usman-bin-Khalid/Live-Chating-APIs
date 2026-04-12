@@ -7,6 +7,7 @@ const cors = require('cors');
 const Message = require('./models/Message');
 const authRoutes = require('./routes/authRoutes');
 const chatRoutes = require('./routes/chatRoutes');
+const profileRoutes = require('./routes/profileRoutes');
 const { swaggerUi, specs } = require('./swagger');
 
 
@@ -68,6 +69,7 @@ app.get('/health', (req, res) => {
 
 app.use('/auth', authRoutes);
 app.use('/chat', chatRoutes);
+app.use('/api/profile', profileRoutes);
 
 // 404 handler
 app.use((req, res) => {

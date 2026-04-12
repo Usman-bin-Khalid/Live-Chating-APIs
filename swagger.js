@@ -373,7 +373,7 @@ const options = {
 
     }
   },
-  apis: []
+  apis: ['./routes/profileRoutes.js']
 };
 
 const specs = swaggerJsdoc(options);

@@ -18,7 +18,7 @@ router.use(auth);
  *           type: integer
  *         country:
  *           type: string
- *         phoneNo:
+ *         phoneNumber:
  *           type: string
  *         about:
  *           type: string
@@ -62,7 +62,7 @@ router.get('/', profileController.getProfile);
  *                 type: integer
  *               country:
  *                 type: string
- *               phoneNo:
+ *               phoneNumber:
  *                 type: string
  *               about:
  *                 type: string

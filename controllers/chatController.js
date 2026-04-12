@@ -2,6 +2,8 @@ const Message = require('../models/Message');
 const mongoose = require('mongoose');
 
 
+
+
 // @desc    Get user inbox (all conversations with latest message)
 // @route   GET /chat/inbox
 exports.getInbox = async (req, res) => {
